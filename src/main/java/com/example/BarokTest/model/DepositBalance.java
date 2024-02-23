@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class DepositBalance {
+    //kolan ma ha mojaz b estefade az lombok nistim
     private long balance;
 }
