@@ -31,10 +31,10 @@ public class WalletController {
 
     private final int MIN_REFERENCE =1;
     private final int MAX_REFERENCE =100000000;
-
+// ina bran ro constructor
     @Autowired
     private WalletService walletService;
-
+// ina bran ro constructor
     @Autowired
     private LogActivityTransactionService logActivityTransactionService;
 
@@ -54,38 +54,45 @@ public class WalletController {
             return ResponseEntity.ok(response);
         }
         else {
+            // ino k inja estefade nakardi chera create kardi???
+            //age chizi hast k kolan faghat mikhay bsazi return object nakon 
+            //hade aghal inja k object nemikhay nayar
             WalletModel walletModel = walletService.createWallet(depositRequest);
             String refrence = String.valueOf(generateRandomReference(MIN_REFERENCE,MAX_REFERENCE));
-            DepositResponse response = new DepositResponse(refrence);
-
             saveLog(depositRequest, TypeLog.CREATE.name(),refrence);
-
-            return ResponseEntity.ok(response);
+//DepositResponse response = ;
+            return ResponseEntity.ok(new DepositResponse(refrence));
         }
     }
 
     @GetMapping("/{user_id}")
     public ResponseEntity<DepositBalance> getBalance(@PathVariable int user_id) {
-
+//object ziyad dari misazi
         if ( walletService.isExistWallet(user_id) ) {
             WalletModel wallet = walletService.getWalletByUserId(user_id);
             DepositBalance balance = new DepositBalance(wallet.getBalance());
 
             return ResponseEntity.ok(balance);
         }
-
+//to ke log save mikoni chera log inra nemindazi
+        //man ba in log mokhalefam
+        //y kari kon k har vaght miyad dakhel har controller log biyote va natije ham log beshe 
+        //k saligheyi nashe har ki har ja khast log kone
         throw new UserNotFound("User Not Exist");
     }
-
+//ina ro util bsaz har classet y majmoe kar moshakhas bkone 
+    // baray controller hat interface bzar k faghat az ona estefade koni
     public int generateRandomReference(int min, int max) {
         Random random = new Random();
         return random.nextInt(max - min + 1) + min;
     }
-
+//util beshe va koli tar 
     public void saveLog(DepositRequest request, String type, String reference) {
         logActivityTransactionService.saveLog(request,type,reference);
     }
 
+    //inke vazife controller nist chera injast????
+    //baray job hat sakhtar joda bechin 
     @Scheduled(cron = "0 0 0 * * *") // Run daily at midnight
     public void totalAmountDaily() {
         double totalAmount = logActivityTransactionService.totalAmount();
