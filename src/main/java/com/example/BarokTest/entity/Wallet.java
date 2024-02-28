@@ -29,10 +29,11 @@ public class Wallet {
     @Column(name = "user_id")
     @NotNull
     private int userId;
+//man basham mizaram "created_dt"
 
     @Column(name = "created_at")
     private Timestamp createdat;
-
+//man basham mizaram "updata_dt"
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 }
